@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=Montserrat:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css"><title>News | dasig.midsa</title></head>
+<body>
+<header class="topbar">
+  <a class="brand" href="midsa.html" aria-label="dasig.MIDSA home">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#E8E8E8"/><line x1="0" y1="0" x2="40" y2="40" stroke="#C4C4C4" stroke-width="1.5"/></svg>
+    <span>dasig.MIDSA</span></a>
+  <nav aria-label="Main"><a href="midsa.html">Home</a><a href="news.html" aria-current="page">NEWS</a><a href="midsa.html#contact">Contact</a></nav>
+</header>
+<main>
+  <article class="article" id="article"><p>Loading&hellip;</p></article>
+  <section class="more" id="more" hidden><h2>More news</h2><div class="news-grid" id="grid"></div></section>
+</main>
+<footer class="foot" id="contact"><p>MSU-IIT DOST Scholars&rsquo; Association &middot; &copy; 2026 MIDSA</p></footer>
+<script src="news-data.js"></script>
+<script src="midsa-news.js"></script>
+<script>
+(async function () {
+  const slug = new URLSearchParams(location.search).get('slug'), D = await loadNews(), box = document.getElementById('article');
+  const a = D && D.articles.find(x => x.slug === slug);
+  if (!a) {
+    document.title = 'Story not found | dasig.midsa';
+    box.innerHTML = '<h1>Story not found</h1><p>It may have been unpublished or the link is wrong. <a href="news.html">Back to all news</a></p>';
+    return;
+  }
+  const cats = Object.fromEntries(D.categories.map(c => [c.slug, c.name]));
+  document.title = a.title + ' | dasig.midsa';
+  box.innerHTML =
+    '<p><a href="news.html">&larr; All news</a></p>' +
+    '<div class="k" style="margin-top:1.5rem">' + esc(cats[a.category] || '') + '</div>' +
+    '<h1>' + esc(a.title) + '</h1>' +
+    '<p class="meta">' + (a.author ? 'By ' + esc(a.author) + ' &middot; ' : '') + '<time datetime="' + esc(a.publishedAt) + '">' + fmtDate(a.publishedAt) + '</time></p>' +
+    (a.cover ? '<img class="cover" src="' + esc(a.cover) + '" alt="">' : '') +
+    '<div class="prose">' + renderBody(a.body) + '</div>';
+  const same = x => (x.category === a.category ? 0 : 1);
+  const others = D.articles.filter(x => x.slug !== a.slug).sort((x, y) => same(x) - same(y) || y.publishedAt.localeCompare(x.publishedAt)).slice(0, 3);
+  if (others.length) { document.getElementById('grid').innerHTML = others.map(o => cardHTML(o, cats)).join(''); document.getElementById('more').hidden = false; }
+})();
+</script>
+</body></html>

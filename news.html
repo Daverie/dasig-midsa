@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=Montserrat:wght@300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css"><title>News | dasig.midsa</title></head>
+<body>
+<header class="topbar">
+  <a class="brand" href="midsa.html" aria-label="dasig.MIDSA home">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="#E8E8E8"/><line x1="0" y1="0" x2="40" y2="40" stroke="#C4C4C4" stroke-width="1.5"/></svg>
+    <span>dasig.MIDSA</span></a>
+  <nav aria-label="Main"><a href="midsa.html">Home</a><a href="news.html" aria-current="page">NEWS</a><a href="midsa.html#contact">Contact</a></nav>
+</header>
+<main class="wrap">
+  <h1>News</h1>
+  <div class="chips" id="filters" role="group" aria-label="Filter by category"></div>
+  <input class="search" id="q" type="search" placeholder="Search stories" aria-label="Search stories">
+  <div class="news-grid" id="grid" aria-live="polite"><p class="empty">Loading&hellip;</p></div>
+</main>
+<footer class="foot" id="contact"><p>MSU-IIT DOST Scholars&rsquo; Association &middot; &copy; 2026 MIDSA</p></footer>
+<script src="news-data.js"></script>
+<script src="midsa-news.js"></script>
+<script>
+(async function () {
+  const D = await loadNews(), grid = document.getElementById('grid'), box = document.getElementById('filters');
+  if (!D) { grid.innerHTML = '<p class="empty">News could not be loaded. Start server.py and reload.</p>'; return; }
+  const cats = Object.fromEntries(D.categories.map(c => [c.slug, c.name]));
+  const all = [...D.articles].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const used = D.categories.filter(c => all.some(a => a.category === c.slug));
+  let cat = new URLSearchParams(location.search).get('category') || '', q = '';
+  function draw() {
+    box.innerHTML = [{ slug: '', name: 'All' }, ...used].map(c =>
+      '<button class="chip" data-cat="' + esc(c.slug) + '" aria-pressed="' + (c.slug === cat) + '">' + esc(c.name) + '</button>').join('');
+    const list = all.filter(a => (!cat || a.category === cat) && (!q || (a.title + ' ' + (a.excerpt || '')).toLowerCase().includes(q)));
+    grid.innerHTML = list.length ? list.map(a => cardHTML(a, cats)).join('') : '<p class="empty">No stories match.</p>';
+  }
+  box.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (b) { cat = b.dataset.cat; draw(); } });
+  document.getElementById('q').addEventListener('input', e => { q = e.target.value.trim().toLowerCase(); draw(); });
+  draw();
+})();
+</script>
+</body></html>
