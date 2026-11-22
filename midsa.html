@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dasig.midsa | MSU-IIT DOST Scholars' Association</title>
+  <!--
+  FONT: MIDSA uses Proxima Nova (Black / Bold / Regular / Light). It is a licensed font,
+  so to use it, add your own @font-face rules (or Adobe Fonts kit) for "Proxima Nova".
+  Until then the page falls back to Montserrat, a close free match, loaded below.
+-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=Montserrat:wght@300..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* MIDSA palette */
+      --main: #004ACD;
+      --main-alt: #0165CB;
+      --white: #FFFFFF;
+      --cyan: #00F7FF;
+      --dark: #333333;
+
+      --bar: 64px;
+      --font-brand: "Proxima Nova", "Montserrat", system-ui, sans-serif;
+      --font: "Manrope", system-ui, sans-serif;
+      --tint: #EAF1FF;
+      --tint-2: #D9FCFE;
+      --radius: 32px;
+      --tracking: -0.05em;
+      /* brand letter spacing: -50 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--white);
+      color: var(--dark);
+      font-family: var(--font);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-brand);
+      letter-spacing: var(--tracking);
+      line-height: 1;
+    }
+
+    /* ---------- Hero that becomes the header ---------- */
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 100vh;
+      /* JS shrinks this to var(--bar) */
+      background: var(--main);
+      color: var(--white);
+      overflow: hidden;
+      z-index: 10;
+      font-family: var(--font-brand);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .brand {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: .18em;
+      white-space: nowrap;
+      font-weight: 900;
+      letter-spacing: var(--tracking);
+      line-height: 1;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand svg {
+      width: 1.1em;
+      height: 1.1em;
+      flex: none;
+    }
+
+    .site-header,
+    .brand,
+    .brand-tail,
+    .nav {
+      will-change: transform, opacity;
+    }
+
+    .site-header {
+      will-change: height;
+    }
+
+    .brand-tail {
+      position: absolute;
+      top: calc(var(--bar) / 2);
+      transform: translateY(-50%);
+      padding-left: .6em;
+      border-left: .12em solid currentColor;
+      font-weight: 700;
+      line-height: 1.1;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .85rem 1.7rem;
+      background: var(--cyan);
+      color: var(--dark);
+      font: 700 1rem/1 var(--font);
+      text-decoration: none;
+      border-radius: 14px;
+      transition: transform .25s, box-shadow .25s, background .25s;
+    }
+
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,40,120,.18); }
+    .btn:active { transform: none; box-shadow: none; }
+
+    .btn:hover {
+      background: var(--white);
+    }
+
+    .btn:focus-visible,
+    .nav a:focus-visible,
+    .brand:focus-visible,
+    .social a:focus-visible {
+      outline: 3px solid var(--cyan);
+      outline-offset: 4px;
+    }
+
+    .nav {
+      position: absolute;
+      right: 1.5rem;
+      top: 0;
+      height: var(--bar);
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .nav a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .nav a.current {
+      font-weight: 700;
+    }
+
+    .nav a:hover {
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+
+    .nav a:focus-visible,
+    .brand:focus-visible {
+      outline-color: currentColor;
+    }
+
+    .nav .icon {
+      display: inline-flex;
+    }
+
+    .nav .icon:hover {
+      text-decoration: none;
+      opacity: .7;
+    }
+
+    .nav .icon svg {
+      width: 26px;
+      height: 26px;
+      fill: currentColor;
+    }
+
+    /* ---------- Page content ---------- */
+    main {
+      margin-top: calc(100vh + 12px);
+    }
+
+    section {
+      max-width: 60rem;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--main);
+    }
+
+    section>p {
+      max-width: 38rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      margin-top: 2.5rem;
+    }
+
+    .piece {
+      padding: 1.75rem;
+      background: var(--white);
+      border-radius: 24px;
+    }
+
+    .ico {
+      display: grid; place-items: center;
+      width: 56px; height: 56px; margin-bottom: 1.25rem;
+      border-radius: 50%; background: var(--tint-2); color: var(--main);
+    }
+    .ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    .piece h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .piece p {
+      font-size: .98rem;
+    }
+
+    .band {
+      background: var(--tint);
+      border-radius: var(--radius);
+      margin: 0 clamp(.75rem, 3vw, 2rem);
+    }
+
+    .band .btn {
+      margin-top: 1.5rem;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--main);
+      color: var(--white);
+      border-radius: var(--radius) var(--radius) 0 0;
+      font-family: var(--font-brand);
+    }
+
+    .footer-inner {
+      max-width: 60rem;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .footer-brand .wordmark {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: var(--tracking);
+      line-height: 1;
+    }
+
+    .footer-brand .sub {
+      font-size: .65rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .social {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: .4rem;
+    }
+
+    .social .handle {
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .social .icons {
+      display: flex;
+      gap: .4rem;
+    }
+
+    .social a {
+      display: inline-flex;
+    }
+
+    .social svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .copy {
+      text-align: center;
+      font-size: .75rem;
+      font-weight: 300;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        gap: .9rem;
+        font-size: .85rem;
+        right: 1rem;
+      }
+
+      .nav .icon {
+        display: none;
+      }
+
+      .social {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .brand-tail {
+        display: none;
+      }
+    }
+
+    /* ---------- Intro band ---------- */
+    .intro { background: linear-gradient(135deg, var(--main) 0%, var(--main-alt) 100%); color: var(--white); border-radius: 40px; margin: 0 clamp(.75rem, 3vw, 2rem); box-shadow: 0 4px 30px rgba(0,30,100,.25); }
+    .intro section { display: grid; grid-template-columns: 1.2fr .8fr; gap: 3rem; align-items: center; padding: 6rem 1.5rem; }
+    .eyebrow { font-family: var(--font-brand); font-size: .95rem; font-weight: 700; color: var(--cyan); margin-bottom: 1.25rem; }
+    .intro h1 { font-size: clamp(2.6rem, 6.5vw, 4.6rem); font-weight: 700; margin-bottom: 1.5rem; }
+    .lead { max-width: 34rem; font-size: 1.1rem; font-weight: 300; margin-bottom: 2rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .9rem; }
+    .btn.ghost { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.55); }
+    .btn.ghost:hover { background: rgba(255,255,255,.14); }
+    .placeholder-card { min-height: 16rem; display: flex; align-items: center; justify-content: center; padding: 1.5rem; text-align: center;
+      min-height: 20rem; border-radius: 999px 999px 32px 32px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); backdrop-filter: blur(6px); font-weight: 700; color: rgba(255,255,255,.85); }
+    .more-link { display: inline-block; margin-top: 1.75rem; font-weight: 700; color: var(--main); text-decoration: none; }
+    .more-link:hover { text-decoration: underline; text-underline-offset: 5px; }
+    @media (max-width: 800px) {
+      .intro section { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+      .placeholder-card { min-height: 10rem; }
+    }
+
+    #join { width: min(60rem, calc(100% - 1.5rem)); margin-bottom: 5rem; padding: 4rem clamp(1.5rem, 5vw, 4rem); background: var(--tint); border-radius: var(--radius); }
+    @media (prefers-reduced-motion: reduce) { .btn, .feat-card { transition: none; } .btn:hover, .feat-card:hover { transform: none; } }
+
+    /* ---------- Get involved: gradient button ---------- */
+    .btn.grad { background: linear-gradient(135deg, var(--cyan) 0%, var(--white) 100%); }
+    .btn.grad:hover { background: linear-gradient(135deg, var(--white) 0%, var(--cyan) 100%); }
+
+    /* ---------- Featured: headline over thumbnail ---------- */
+    .feat-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); margin-top: 2rem; }
+    .feat-card { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: 28px; overflow: hidden; transition: transform .3s, box-shadow .3s; background: #E8E8E8; color: var(--white); text-decoration: none; }
+    .feat-card .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease;
+      background: linear-gradient(to top right, transparent calc(50% - 1px), #C4C4C4 50%, transparent calc(50% + 1px)), #E8E8E8; }
+    .feat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,40,120,.2); }
+    .feat-card:hover .ph { transform: scale(1.04); }
+    .feat-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,20,70,.92) 0%, rgba(0,20,70,.5) 45%, transparent 75%); }
+    .feat-card .cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 1.25rem; }
+    .feat-card .k { font-size: .85rem; font-weight: 700; color: var(--cyan); margin-bottom: .5rem; }
+    .feat-card h3 { font-size: 1.4rem; font-weight: 700; line-height: 1.1; }
+    .feat-card:focus-visible { outline: 3px solid var(--main); outline-offset: 3px; }
+
+    /* Page content rises with the header and fades in (opacity is driven by scroll in the script) */
+    main { opacity: 0; visibility: hidden; }
+    /* Brief pause: the first section stays pinned under the header for a short scroll distance */
+    @media (min-width: 801px) and (min-height: 760px) {
+      .intro-pin { padding-bottom: 35vh; }
+      .intro-pin .intro { position: sticky; top: calc(var(--bar) + 24px); }
+    }
+  </style>
+  <noscript><style>main { opacity: 1; visibility: visible; }</style></noscript>
+</head>
+
+<body>
+
+  <header class="site-header" id="header">
+    <a class="brand" id="brand" href="#top" aria-label="dasig.MIDSA Official Website home">
+      <!-- Placeholder logo: replace with the official MIDSA logo (SVG or <img>) -->
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <rect width="40" height="40" fill="#E8E8E8" />
+        <line x1="0" y1="0" x2="40" y2="40" stroke="#C4C4C4" stroke-width="1.5" />
+      </svg>
+      <span>dasig.MIDSA</span>
+    </a>
+
+    <div class="brand-tail" id="brandTail">Official Website</div>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <a class="current" href="#top" aria-current="page">Home</a>
+      <a href="news.html">NEWS</a>
+      <a href="#contact">Contact</a>
+      <a class="icon" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24">
+          <path
+            d="M12 2a10 10 0 0 0-1.560 19.880v-7H7.900V12h2.540V9.800c0-2.500 1.500-3.900 3.800-3.900 1.100 0 2.200.2 2.200.2v2.500h-1.300c-1.200 0-1.600.8-1.600 1.600V12h2.800l-.4 2.900h-2.300v7A10 10 0 0 0 12 2z" />
+        </svg></a>
+      <a class="icon" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24">
+          <path
+            d="M7.500 2h9A5.500 5.500 0 0 1 22 7.500v9a5.500 5.500 0 0 1-5.500 5.500h-9A5.500 5.500 0 0 1 2 16.500v-9A5.500 5.500 0 0 1 7.500 2zm0 2A3.500 3.500 0 0 0 4 7.500v9A3.500 3.500 0 0 0 7.500 20h9a3.500 3.500 0 0 0 3.500-3.500v-9A3.500 3.500 0 0 0 16.500 4h-9zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.300-3.300a1.200 1.200 0 1 1 0 2.400 1.200 1.200 0 0 1 0-2.400z" />
+        </svg></a>
+      <a class="icon" href="#" aria-label="Twitter"><svg viewBox="0 0 24 24">
+          <path
+            d="M22 5.900c-.7.300-1.500.5-2.400.6.900-.5 1.500-1.300 1.800-2.300-.8.500-1.700.8-2.600 1a4.100 4.100 0 0 0-7 3.700A11.600 11.600 0 0 1 3.400 4.600a4.100 4.100 0 0 0 1.300 5.500c-.7 0-1.300-.2-1.900-.5 0 2 1.400 3.700 3.300 4.100-.6.200-1.200.2-1.800.1.500 1.600 2 2.800 3.800 2.800A8.300 8.300 0 0 1 2 18.300 11.700 11.700 0 0 0 8.300 20c7.500 0 11.700-6.300 11.700-11.700v-.5c.8-.6 1.500-1.300 2-2.100z" />
+        </svg></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="intro-pin">
+    <div class="intro">
+      <section id="intro">
+        <div>
+          <p class="eyebrow">Student-led &middot; Community-driven</p>
+          <h1>Ideas into action. Students into leaders.</h1>
+          <p class="lead">A digital home for our organization, where students can discover programs, follow campus stories, join activities, and access the latest news.</p>
+          <div class="actions">
+            <a class="btn grad" href="#join">Get involved</a>
+            <a class="btn ghost" href="#programs">Learn about us</a>
+          </div>
+        </div>
+        <div class="placeholder-card"><span>Add a photo here</span></div>
+      </section>
+    </div>
+    </div>
+
+    <section id="featured">
+      <h2>Featured</h2>
+      <div class="feat-grid" id="featGrid"></div>
+      <a class="more-link" href="news.html">All news &rarr;</a>
+    </section>
+
+    <div class="band">
+      <section id="programs">
+        <h2>What we do</h2>
+        <div class="grid">
+          <div class="piece">
+            <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H12v15h6.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg></div>
+            <h3>Academic support</h3>
+            <p>Peer tutoring and review sessions before exams.</p>
+          </div>
+          <div class="piece">
+            <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></div>
+            <h3>Community service</h3>
+            <p>Outreach activities led by scholars, for scholars and neighbors.</p>
+          </div>
+          <div class="piece">
+            <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></div>
+            <h3>Scholar events</h3>
+            <p>Orientations, gatherings and talks throughout the school year.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section id="join">
+      <h2>Let's collaborate</h2>
+      <p>Reach out to the organization or follow our official channels for announcements and opportunities.</p>
+      <a class="btn" style="margin-top:1.5rem; background: var(--main); color: var(--white);" href="#">MESSAGE
+        midsapartnerships@gmail.com</a>
+    </section>
+
+    <footer id="contact">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="wordmark">midsa</span>
+          <span class="sub">MSU-Iligan Institute of Technology<br>MSU-IIT DOST Scholars' Association</span>
+        </div>
+        <div class="social">
+          <span class="handle">midsaonline</span>
+          <div class="icons">
+            <a href="#" aria-label="MIDSA on Facebook">
+              <svg viewBox="0 0 26 26">
+                <circle cx="13" cy="13" r="13" fill="#fff" />
+                <path
+                  d="M14 20v-6h2l.4-2.500H14V10c0-.7.3-1.200 1.300-1.200h1.200V6.600C16.300 6.500 15.600 6.500 14.800 6.500 13 6.500 11.700 7.600 11.700 9.700v1.800H9.700V14h2v6z"
+                  fill="#004ACD" />
+              </svg>
+            </a>
+            <a href="#" aria-label="MIDSA on X">
+              <svg viewBox="0 0 26 26">
+                <circle cx="13" cy="13" r="13" fill="#fff" />
+                <path d="M8 8l10 10M18 8L8 18" stroke="#004ACD" stroke-width="2.200" stroke-linecap="round" />
+              </svg>
+            </a>
+            <a href="#" aria-label="MIDSA on Instagram">
+              <svg viewBox="0 0 26 26">
+                <circle cx="13" cy="13" r="13" fill="#fff" />
+                <rect x="7.500" y="7.500" width="11" height="11" rx="3.200" fill="none" stroke="#004ACD"
+                  stroke-width="1.800" />
+                <circle cx="13" cy="13" r="2.600" fill="none" stroke="#004ACD" stroke-width="1.800" />
+                <circle cx="16.400" cy="9.600" r=".9" fill="#004ACD" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <p class="copy">&copy; 2026 MIDSA. Sample page.</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const BAR = 64;          // collapsed header height (px)
+      const PAD = 24;          // left padding of brand once collapsed
+      const header = document.getElementById('header');
+      const INSET = () => (window.innerWidth < 700 ? 12 : 32);
+      const brand = document.getElementById('brand');
+      const tail = document.getElementById('brandTail');
+      const nav = document.getElementById('nav');
+      const main = document.querySelector('main');
+
+      const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const smooth = t => t * t * (3 - 2 * t);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let target = 0;   // where scroll says we should be (0..1)
+      let current = 0;  // what we are actually showing; eases toward target
+      let running = false;
+
+      function render(p) {
+        const vh = window.innerHeight;
+        const vw = window.innerWidth;
+        const e = smooth(p);
+
+        // Height is linear so the header's bottom edge stays glued to the page content
+        header.style.height = lerp(vh, BAR, p) + 'px';
+        const inset = lerp(0, INSET(), e);
+        header.style.left = inset + 'px';
+        header.style.right = inset + 'px';
+        header.style.top = lerp(0, 12, e) + 'px';
+        header.style.borderRadius = lerp(0, BAR / 2, e) + 'px';
+        const hw = vw - 2 * inset;
+
+        // Colors: blue hero -> white bar
+        const mix = (a, b) => Math.round(lerp(a, b, e));
+        header.style.background = 'rgba(' + mix(0, 255) + ',' + mix(74, 255) + ',' + mix(205, 255) + ',' + lerp(1, 0.78, e) + ')';
+        header.style.color = 'rgb(' + mix(255, 51) + ',' + mix(255, 51) + ',' + mix(255, 51) + ')';
+        header.style.boxShadow = '0 4px 24px rgba(0,30,100,' + (0.14 * e) + ')';
+        header.style.border = '1px solid rgba(255,255,255,' + (0.6 * e) + ')';
+
+        // Brand: size, weight and tracking all glide together (no snapping)
+        const bigSize = Math.min(vw * 0.095, 120);
+        const smallSize = vw < 700 ? 18 : 26;
+        brand.style.fontSize = lerp(bigSize, smallSize, e) + 'px';
+        brand.style.fontWeight = Math.round(lerp(900, 700, e));
+        brand.style.letterSpacing = lerp(-0.05, -0.01, e) + 'em';
+
+        // Position: centered -> left. Uses real width so it never drifts.
+        const w = brand.offsetWidth;
+        const x = lerp((hw - w) / 2, PAD, e);
+        brand.style.left = x + 'px';
+        brand.style.top = lerp(vh * 0.5, BAR / 2, e) + 'px';
+        brand.style.transform = 'translateY(-50%)';
+
+        // Tail + nav ease in during the last part of the move
+        const f = smooth(clamp((p - 0.55) / 0.45, 0, 1));
+        tail.style.fontSize = smallSize + 'px';
+        tail.style.opacity = f;
+        tail.style.visibility = f === 0 ? 'hidden' : 'visible';
+        tail.style.left = (x + w + smallSize * 0.7) + 'px';
+
+        nav.style.opacity = f;
+        nav.style.visibility = f === 0 ? 'hidden' : 'visible';
+        nav.style.pointerEvents = f > 0.5 ? 'auto' : 'none';
+        nav.style.transform = 'translateY(' + (1 - f) * 8 + 'px)';
+
+        // Content scrolls up with the header and fades in; fully opaque just as the header is formed
+        const o = smooth(clamp((p - 0.3) / 0.7, 0, 1));
+        main.style.opacity = o;
+        main.style.visibility = o === 0 ? 'hidden' : 'visible';
+      }
+
+      function frame() {
+        const diff = target - current;
+        if (reduceMotion || Math.abs(diff) < 0.0005) {
+          current = target;
+          render(current);
+          running = false;
+          return;
+        }
+        current += diff * 0.16;   // easing toward the scroll position
+        render(current);
+        requestAnimationFrame(frame);
+      }
+
+      function onScroll() {
+        const range = Math.max(window.innerHeight - BAR, 1);
+        target = clamp(window.scrollY / range, 0, 1);
+        if (!running) { running = true; requestAnimationFrame(frame); }
+      }
+
+      document.documentElement.style.scrollPaddingTop = BAR + 'px';
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => { onScroll(); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(onScroll);
+
+      // Initial state (also correct if the page loads already scrolled)
+      const range0 = Math.max(window.innerHeight - BAR, 1);
+      target = current = clamp(window.scrollY / range0, 0, 1);
+      render(current);
+    })();
+  </script>
+  <script src="news-data.js"></script>
+  <script>
+    // Featured cards: marked-featured stories first, then the newest, top 3. Reads the live database when served by server.py.
+    (async function () {
+      const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      let D;
+      try { const r = await fetch('/api/news'); if (!r.ok) throw 0; D = await r.json(); }
+      catch (e) { D = location.protocol === 'file:' && typeof MIDSA_NEWS !== 'undefined' ? MIDSA_NEWS : null; }
+      const grid = document.getElementById('featGrid');
+      if (!D || !grid) return;
+      const cats = Object.fromEntries(D.categories.map(c => [c.slug, c.name]));
+      const top = [...D.articles].sort((a, b) => (b.featured - a.featured) || b.publishedAt.localeCompare(a.publishedAt)).slice(0, 3);
+      if (!top.length) { document.getElementById('featured').hidden = true; return; }
+      grid.innerHTML = top.map(a => `
+        <a class="feat-card" href="article.html?slug=${encodeURIComponent(a.slug)}">
+          ${a.cover ? `<img class="ph" src="${esc(a.cover)}" alt="" loading="lazy">` : '<div class="ph" aria-hidden="true"></div>'}
+          <div class="cap"><div class="k">${esc(cats[a.category] || '')}</div><h3>${esc(a.title)}</h3></div>
+        </a>`).join('');
+    })();
+  </script>
+</body>
+
+</html>
